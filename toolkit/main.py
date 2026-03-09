@@ -1,6 +1,6 @@
 import yaml
 import logging
-from toolkit.monitor import check_cpu, check_memory
+from toolkit.monitor import check_cpu, check_memory, check_disk
 
 def setup_logger():
     logger = logging.getLogger(__name__)
@@ -45,6 +45,12 @@ def main():
     if memory_result["stauts"] == "Alert":
         logger.warning("Memory usage exceeding threshold")
 
+    disk_result = check_disk(config["disk_threshold"])
+
+    logger.info(f"Disk usage: {disk_result["disk_usage"]}")
+
+    if disk_result["stauts"] == "Alert":
+        logger.warning("Disk usage exceeding threshold")
 
 if __name__ == "__main__":
     main()

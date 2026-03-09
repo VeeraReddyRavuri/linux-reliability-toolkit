@@ -26,3 +26,17 @@ def check_memory(threshold):
             "stauts": "OK",
             "memory_usage": memory_usage
     }
+
+def check_disk(threshold, path="/"):
+    disk = psutil.disk_usage(path)
+    disk_usage = disk.percent
+
+    if disk_usage > threshold:
+        return {
+            "stauts": "Alert",
+            "disk_usage": disk_usage
+        }
+    return {
+            "stauts": "OK",
+            "disk_usage": disk_usage
+    }
