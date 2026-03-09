@@ -32,7 +32,7 @@ def restart_service(service_name):
             "service": service_name
         }  
     return {
-        "status": "RESTARTED",
+        "status": "FAILED",
         "service": service_name,
         "error": result.stderr.strip()
     }
