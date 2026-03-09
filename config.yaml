@@ -2,7 +2,8 @@ cpu_threshold: 80
 memory_threshold: 85
 disk_threshold: 90
 
-services_to_monitor: []
+services_to_monitor:
+  - ssh
 
 log_file: logs/toolkit.log
 

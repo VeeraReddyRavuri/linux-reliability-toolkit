@@ -1,6 +1,7 @@
 import yaml
 import logging
 from toolkit.monitor import check_cpu, check_memory, check_disk
+from toolkit.service_manager import is_service_active, restart_service
 
 def setup_logger():
     logger = logging.getLogger(__name__)
@@ -51,6 +52,23 @@ def main():
 
     if disk_result["stauts"] == "Alert":
         logger.warning("Disk usage exceeding threshold")
+    
+    services = config.get("services_to_monitor", [])
+
+    for service in services:
+        result = is_service_active(service)
+
+        if result["status"] == "FAILED":
+            logger.warning(f"Service {service} is not active. Attempting restart..")
+
+            restart_result = restart_service(service)
+
+            if restart_result["status"] == "RESTARTED":
+                logger.info(f"Service {service} restarted succesfully")
+            else:
+                logger.error(f"Failed to restart service {service}: {restart_result["error"]}")
+        else:
+            logger.info(f"Service {service} is running")
 
 if __name__ == "__main__":
     main()
