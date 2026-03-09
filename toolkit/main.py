@@ -2,6 +2,7 @@ import yaml
 import logging
 from toolkit.monitor import check_cpu, check_memory, check_disk
 from toolkit.service_manager import is_service_active, restart_service
+from toolkit.log_parser import scan_logs
 
 def setup_logger():
     logger = logging.getLogger(__name__)
@@ -69,6 +70,14 @@ def main():
                 logger.error(f"Failed to restart service {service}: {restart_result["error"]}")
         else:
             logger.info(f"Service {service} is running")
+
+    log_result = scan_logs()
+
+    if log_result["status"] == "ERROR_FOUND":
+        logger.warning("Recent error logs detected")
+        logger.warning(log_result["logs"])
+    else:
+        logger.info("No recent critical logs found")
 
 if __name__ == "__main__":
     main()
