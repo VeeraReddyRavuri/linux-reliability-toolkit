@@ -93,7 +93,7 @@ def main():
         if alert_result["status"] == "SENT":
             logger.info("Webhook alert sent successfully")
         else:
-            logger.error(f"Webhool alert failed: {alert_result["error"]}")
+            logger.error(f"Webhook alert failed: {alert_result["error"]}")
 
 if __name__ == "__main__":
     main()
