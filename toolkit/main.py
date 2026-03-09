@@ -1,5 +1,6 @@
 import yaml
 import logging
+from toolkit.monitor import check_cpu
 
 def setup_logger():
     logger = logging.getLogger(__name__)
@@ -24,6 +25,14 @@ def main():
     config = load_config()
 
     logger.info("Configuration loaded successfully")
+
+    cpu_result = check_cpu(config["cpu_threshold"])
+
+    logger.info(f"CPU usage: {cpu_result["cpu_usage"]}%")
+
+    if cpu_result["status"] == "Alert":
+        logger.warning("CPU usage exceeded threshold")
+
 
 if __name__ == "__main__":
     main()
