@@ -3,6 +3,7 @@ import logging
 from toolkit.monitor import check_cpu, check_memory, check_disk
 from toolkit.service_manager import is_service_active, restart_service
 from toolkit.log_parser import scan_logs
+from toolkit.notifier import send_webhook_alert
 
 def setup_logger():
     logger = logging.getLogger(__name__)
@@ -78,6 +79,21 @@ def main():
         logger.warning(log_result["logs"])
     else:
         logger.info("No recent critical logs found")
+    
+    webhook_config = config.get("webhook", {})
+
+    if webhook_config.get("enabled"):
+        alert_message = "Linux Reliability issue detected an issue"
+
+        alert_result = send_webhook_alert(
+            webhook_config["url"],
+            alert_message
+        )
+
+        if alert_result["status"] == "SENT":
+            logger.info("Webhook alert sent successfully")
+        else:
+            logger.error(f"Webhool alert failed: {alert_result["error"]}")
 
 if __name__ == "__main__":
     main()
