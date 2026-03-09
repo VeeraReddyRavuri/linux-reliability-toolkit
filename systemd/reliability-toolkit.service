@@ -1,0 +1,13 @@
+[Unit]
+Description=Linux Reliability Toolkit
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /path/to/linux-reliability-toolkit/toolkit/main.py
+WorkingDirectory=/path/to/linux-reliability-toolkit
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
