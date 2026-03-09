@@ -1,0 +1,1 @@
+*/5 * * * * /usr/bin/python3 /path/to/linux-reliability-toolkit/toolkit/main.py
