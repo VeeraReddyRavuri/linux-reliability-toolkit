@@ -58,8 +58,6 @@ linux-reliability-toolkit
 
 ## Architecture
 
-## Architecture
-
 ```mermaid
 flowchart TD
 

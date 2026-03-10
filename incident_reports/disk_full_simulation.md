@@ -1,16 +1,28 @@
 # Incident Report: Disk Full Simulation
 
-## Incident Description
-Simulated a disk full condition to test monitoring and alerting behavior.
+## What Broke
+A simulated disk usage spike was created by allocating a large file to test the monitoring system.
 
-## Detection Method
-The reliability toolkit detected disk usage exceeding the configured threshold.
+## Detection
+The reliability toolkit detected disk usage exceeding the configured threshold and logged a warning.
 
 ## Root Cause
-Disk space was intentionally consumed to trigger the alert condition.
+Disk space was intentionally consumed using:
 
-## Mitigation
-Freed disk space and verified the monitoring system returned to normal state.
+```bash
+fallocate -l 2G disk_test_file
+```
+
+This increased disk usage enough to cross the configured threshold.
+
+## Fix Applied
+The temporary test file was removed:
+
+```bash
+rm disk_test_file
+```
+
+Disk usage returned to normal levels.
 
 ## Prevention
-Implement log rotation and disk usage monitoring to prevent disk exhaustion.
+The reliability toolkit continuously monitors disk usage and alerts when thresholds are breached, enabling early detection of disk exhaustion before services fail.
