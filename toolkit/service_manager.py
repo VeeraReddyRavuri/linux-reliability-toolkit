@@ -11,7 +11,7 @@ def is_service_active(service_name):
 
     if status != "active":
         return{
-            "status": "Failed",
+            "status": "FAILED",
             "service": service_name
         }
     return{
@@ -26,7 +26,7 @@ def restart_service(service_name):
         text = True,
     )
 
-    if resutl.returncode == 0:
+    if result.returncode == 0:
         return {
             "status": "RESTARTED",
             "service": service_name
@@ -34,5 +34,5 @@ def restart_service(service_name):
     return {
         "status": "FAILED",
         "service": service_name,
-        "error": result.stderr.strip()
+        "error": result.stderr.strip() or "Permission denied or insufficient privileges"
     }

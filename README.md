@@ -108,10 +108,26 @@ python -m toolkit.main
 ```
 
 ## Failure Simulation
-A disk-full scenario was simulated to verify that the monitoring tool detects high disk usage and logs an alert.
 
-See the detailed incident report:
+The toolkit was tested under multiple failure scenarios to verify detection, recovery behavior, and failure logging.
+
+### Disk Exhaustion Simulation
+A large file was created to artificially increase disk usage beyond the configured threshold.  
+The monitoring tool detected the condition and logged a warning.
+
 [Disk Full Simulation Report](incident_reports/disk_full_simulation.md)
+
+### Service Failure Detection
+The `cron` service was manually stopped to simulate a service crash.  
+The toolkit detected that the service was inactive.
+
+[Service Restart Failure Report](incident_reports/service_restart_failure.md)
+
+### Service Restart Permission Failure
+When the toolkit attempted to restart the failed service, the restart failed because the script was executed without sufficient privileges.  
+The error was captured and logged correctly.
+
+[Service Restart Permission Failure Report](incident_reports/service_restart_permission_failure.md)
 
 ## Future Improvements
 - Prometheus metrics
