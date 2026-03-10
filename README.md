@@ -56,6 +56,12 @@ linux-reliability-toolkit
 └── .gitignore
 ```
 
+## Architecture
+
+See the system architecture diagram:
+
+[Architecture Diagram](docs/architecture.md)
+
 ## Setup
 Clone the repository:
 

@@ -1,34 +1,22 @@
 # Architecture Diagram
 
-+----------------------+
-| Cron / Systemd |
-| (scheduler trigger)|
-+----------+-----------+
-|
-v
-+----------------------+
-| main.py |
-| Orchestrates checks |
-+----------+-----------+
-|
-v
-+----------------------+ +----------------------+
-| monitor.py | | service_manager.py |
-| CPU / Mem / Disk | | systemd service |
-| health checks | | status + restart |
-+----------+-----------+ +----------+-----------+
-| |
-v v
-+----------------------+ +----------------------+
-| log_parser.py | | notifier.py |
-| journalctl scanning | | webhook alerts |
-+----------------------+ +----------------------+
-       |
-       v
-+----------------------+
-| Logging |
-| logs/toolkit.log |
-+----------------------+
+```mermaid
+flowchart TD
+
+Scheduler["Cron / systemd timer"] --> Main["main.py (orchestrator)"]
+
+Main --> Monitor["monitor.py<br/>CPU / Memory / Disk"]
+Main --> ServiceManager["service_manager.py<br/>systemd checks"]
+Main --> LogParser["log_parser.py<br/>journalctl scanning"]
+Main --> Notifier["notifier.py<br/>webhook alerts"]
+
+Monitor --> Logger["Structured Logging"]
+ServiceManager --> Logger
+LogParser --> Logger
+Notifier --> Logger
+
+Logger --> LogFile["logs/toolkit.log"]
+```
 
 ## Flow
 
