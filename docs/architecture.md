@@ -62,3 +62,21 @@ The Python `logging` module is used instead of print statements to enable struct
 
 ### Subprocess for System Interaction
 System utilities like `systemctl` and `journalctl` are executed using Python's `subprocess` module to integrate Linux system behavior directly into the toolkit.
+
+## Design Trade-offs
+
+### Cron vs systemd timers
+The project uses cron for scheduling because it is simple and widely available.  
+systemd timers provide tighter integration with system services but add complexity for a small monitoring tool.
+
+### Simple log scanning vs deep log parsing
+The toolkit uses `journalctl` filtering instead of complex parsing logic.  
+This approach is more resilient to malformed logs but provides less detailed log analysis.
+
+### YAML configuration vs environment variables
+Configuration is stored in `config.yaml` because it supports structured values such as service lists and thresholds.  
+Environment variables are better for flat key-value configuration but less convenient for structured data.
+
+### Direct system commands vs Python libraries
+System interactions such as service checks and log retrieval use `systemctl` and `journalctl` through `subprocess`.  
+This ensures behavior matches how administrators interact with the system but requires the tool to run on Linux systems with systemd.

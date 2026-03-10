@@ -1,4 +1,7 @@
 # Linux Reliability Toolkit
+
+**Version:** v1.0.0
+
 A lightweight Python-based system health monitor that detects failures, attempts recovery, and logs incidents.
 
 ## Demo
@@ -192,3 +195,11 @@ Reliability Engineering
 - Systemd timer instead of cron
 - Log pattern detection
 - Alert throttling
+
+## Limitations
+
+- The toolkit currently monitors only the root filesystem (`/`) for disk usage.
+- Service restart attempts require root privileges. When the tool runs as a non-root user, restart operations will fail.
+- Log scanning relies on simple `journalctl` filtering and does not perform advanced pattern analysis.
+- Webhook alerting is basic and does not implement retry logic or alert throttling.
+- Metrics are logged but not stored historically for trend analysis.
