@@ -5,7 +5,7 @@ def check_cpu(threshold):
 
     if cpu_usage > threshold:
         return {
-            "status": "Alert",
+            "status": "ALERT",
             "cpu_usage": cpu_usage
         }
     return {
@@ -19,11 +19,11 @@ def check_memory(threshold):
 
     if memory_usage > threshold:
         return {
-            "stauts": "Alert",
+            "status": "ALERT",
             "memory_usage": memory_usage
         }
     return {
-            "stauts": "OK",
+            "status": "OK",
             "memory_usage": memory_usage
     }
 
@@ -33,10 +33,10 @@ def check_disk(threshold, path="/"):
 
     if disk_usage > threshold:
         return {
-            "stauts": "Alert",
+            "status": "ALERT",
             "disk_usage": disk_usage
         }
     return {
-            "stauts": "OK",
+            "status": "OK",
             "disk_usage": disk_usage
     }
