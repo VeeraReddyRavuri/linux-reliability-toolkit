@@ -129,6 +129,12 @@ The error was captured and logged correctly.
 
 [Service Restart Permission Failure Report](incident_reports/service_restart_permission_failure.md)
 
+### Log Corruption Simulation
+When random binary log entries were injected into the system journal using ```logger "$(head -c 100 /dev/urandom | base64)"``` to simulate corrupted or unexpected log data, the toolkit does not parse logs using fragile patterns.
+It safely captures journal output and logs it without crashing.
+
+[Log Corruption Simulation Report](incident_reports/log_corruption_simulation.md)
+
 ## Future Improvements
 - Prometheus metrics
 - Systemd timer instead of cron
