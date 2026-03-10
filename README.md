@@ -58,9 +58,25 @@ linux-reliability-toolkit
 
 ## Architecture
 
-See the system architecture diagram:
+## Architecture
 
-[Architecture Diagram](docs/architecture.md)
+```mermaid
+flowchart TD
+
+Scheduler["Cron / systemd timer"] --> Main["main.py (orchestrator)"]
+
+Main --> Monitor["monitor.py<br/>CPU / Memory / Disk"]
+Main --> ServiceManager["service_manager.py<br/>systemd checks"]
+Main --> LogParser["log_parser.py<br/>journalctl scanning"]
+Main --> Notifier["notifier.py<br/>webhook alerts"]
+
+Monitor --> Logger["Structured Logging"]
+ServiceManager --> Logger
+LogParser --> Logger
+Notifier --> Logger
+
+Logger --> LogFile["logs/toolkit.log"]
+```
 
 ## Setup
 Clone the repository:
