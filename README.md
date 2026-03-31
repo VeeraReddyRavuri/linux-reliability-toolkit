@@ -1,27 +1,42 @@
 # Linux Reliability Toolkit
 
-**Version:** v1.0.0
+>  System-level reliability monitor designed to detect failures, attempt recovery, and surface operational issues clearly.
 
-A lightweight Python-based system health monitor that detects failures, attempts recovery, and logs incidents.
+## TL;DR
+- Built a system-level reliability monitor using Python and Linux tooling
+- Detects CPU, memory, disk, and service failures using systemd and journalctl
+- Attempts automated recovery (service restart) and logs outcomes
+- Simulates real-world failure scenarios (disk exhaustion, service crashes, permission issues)
+- Designed to surface failures clearly and validate recovery behavior
 
-## Demo
-
-Example run:
-
-```
-python -m toolkit.main
-
-026-03-10 04:30:29,566 | INFO | Configuration loaded successfully
-2026-03-10 04:30:30,567 | INFO | CPU usage: 0.3%
-2026-03-10 04:30:30,568 | INFO | Memory usage: 28.8%
-2026-03-10 04:30:30,568 | INFO | Disk usage: 0.4
-2026-03-10 04:30:30,573 | WARNING | Service cron is not active. Attempting restart..
-2026-03-10 04:30:30,580 | ERROR | Failed to restart service cron: Permission denied or insufficient privileges
-2026-03-10 04:30:30,603 | WARNING | Recent error logs detected
-```
+---
 
 ## Overview
 A Python-based reliability monitoring tool that checks system health, detects service failures, parses system logs, and sends alerts when issues are detected.
+
+---
+
+## Architecture
+
+```mermaid
+flowchart TD
+
+Scheduler["Cron / systemd timer"] --> Main["main.py (orchestrator)"]
+
+Main --> Monitor["monitor.py<br/>CPU / Memory / Disk"]
+Main --> ServiceManager["service_manager.py<br/>systemd checks"]
+Main --> LogParser["log_parser.py<br/>journalctl scanning"]
+Main --> Notifier["notifier.py<br/>webhook alerts"]
+
+Monitor --> Logger["Structured Logging"]
+ServiceManager --> Logger
+LogParser --> Logger
+Notifier --> Logger
+
+Logger --> LogFile["logs/toolkit.log"]
+```
+
+---
 
 ## Design Goals
 
@@ -33,6 +48,8 @@ This project demonstrates reliability engineering fundamentals:
 - Capture operational logs
 - Surface failure conditions clearly
 - Document incidents and root causes
+
+---
 
 ## Features
 - CPU usage monitoring
@@ -46,6 +63,8 @@ This project demonstrates reliability engineering fundamentals:
 - systemd service integration
 - Cron-based scheduling
 
+---
+
 ## Tech Stack
 - Python
 - psutil
@@ -54,6 +73,8 @@ This project demonstrates reliability engineering fundamentals:
 - cron
 - requests
 - YAML configuration
+
+---
 
 ## Project Structure
 
@@ -92,25 +113,7 @@ linux-reliability-toolkit
 └── .gitignore
 ```
 
-## Architecture
-
-```mermaid
-flowchart TD
-
-Scheduler["Cron / systemd timer"] --> Main["main.py (orchestrator)"]
-
-Main --> Monitor["monitor.py<br/>CPU / Memory / Disk"]
-Main --> ServiceManager["service_manager.py<br/>systemd checks"]
-Main --> LogParser["log_parser.py<br/>journalctl scanning"]
-Main --> Notifier["notifier.py<br/>webhook alerts"]
-
-Monitor --> Logger["Structured Logging"]
-ServiceManager --> Logger
-LogParser --> Logger
-Notifier --> Logger
-
-Logger --> LogFile["logs/toolkit.log"]
-```
+---
 
 ## Setup
 Clone the repository:
@@ -143,6 +146,41 @@ pip install -r requirements.txt
 python -m toolkit.main
 ```
 
+---
+
+## Demo
+
+Example run:
+
+```
+python -m toolkit.main
+
+026-03-10 04:30:29,566 | INFO | Configuration loaded successfully
+2026-03-10 04:30:30,567 | INFO | CPU usage: 0.3%
+2026-03-10 04:30:30,568 | INFO | Memory usage: 28.8%
+2026-03-10 04:30:30,568 | INFO | Disk usage: 0.4
+2026-03-10 04:30:30,573 | WARNING | Service cron is not active. Attempting restart..
+2026-03-10 04:30:30,580 | ERROR | Failed to restart service cron: Permission denied or insufficient privileges
+2026-03-10 04:30:30,603 | WARNING | Recent error logs detected
+```
+
+---
+
+## Where This Fits
+
+This project represents the **host-level reliability layer** in a system.
+
+While cloud infrastructure and containers define system architecture,
+this project focuses on:
+
+- what happens inside the machine
+- how failures are detected at the OS level
+- how recovery can be automated
+
+It complements higher-level systems by ensuring the underlying host remains healthy.
+
+---
+
 ## Failure Simulation
 
 The toolkit was tested under multiple failure scenarios to verify detection, recovery behavior, and failure logging.
@@ -171,6 +209,8 @@ It safely captures journal output and logs it without crashing.
 
 [Log Corruption Simulation Report](incident_reports/log_corruption_simulation.md)
 
+---
+
 ## Skills Demonstrated
 
 Linux Operations
@@ -190,11 +230,33 @@ Reliability Engineering
 - failure simulation
 - incident reporting
 
+---
+
+## Design Decisions & Tradeoffs
+
+- **Python over shell scripts**
+  Chosen for better structure, modularity, and maintainability.
+
+- **systemd + journalctl integration**
+  Uses native Linux tooling instead of external agents to understand
+  how systems behave without abstractions.
+
+- **Cron scheduling vs real-time monitoring**
+  Simpler to implement and reason about; in production, event-driven or
+  streaming monitoring would reduce detection latency.
+
+- **Webhook-based alerting**
+  Lightweight and flexible; can integrate with Slack, email, or incident systems.
+
+---
+
 ## Future Improvements
 - Prometheus metrics
 - Systemd timer instead of cron
 - Log pattern detection
 - Alert throttling
+
+---
 
 ## Limitations
 
@@ -203,3 +265,7 @@ Reliability Engineering
 - Log scanning relies on simple `journalctl` filtering and does not perform advanced pattern analysis.
 - Webhook alerting is basic and does not implement retry logic or alert throttling.
 - Metrics are logged but not stored historically for trend analysis.
+
+---
+
+**Version:** v1.0.0
