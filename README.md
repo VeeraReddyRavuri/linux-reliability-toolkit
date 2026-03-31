@@ -2,6 +2,12 @@
 
 >  System-level reliability monitor designed to detect failures, attempt recovery, and surface operational issues clearly.
 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
+![systemd](https://img.shields.io/badge/systemd-000000?style=flat&logo=linux&logoColor=white)
+![journalctl](https://img.shields.io/badge/journalctl-4EAA25?style=flat&logo=linux&logoColor=white)
+![cron](https://img.shields.io/badge/cron-222222?style=flat&logo=linux&logoColor=white)
+
 ## TL;DR
 - Built a system-level reliability monitor using Python and Linux tooling
 - Detects CPU, memory, disk, and service failures using systemd and journalctl
